@@ -24,11 +24,11 @@ Example playbooks can be found in docs/examples
 A detailed syntax description is found in each module
 
 ## Contribute
-If you miss a feature please open an issue and mark it as ENHANCEMENT: https://github.com/hv-ps/hitachi.raidcom.ansible/issues
+If you miss a feature please open an issue and mark it as ENHANCEMENT: https://github.com/hitachi-vantara/hitachi.raidcom.ansible/issues
 
 ## Support
 This is a community supported collection.  
-Please report issues marked as BUG here: https://github.com/hv-ps/hitachi.raidcom.ansible/issues
+Please report issues marked as BUG here: https://github.com/hitachi-vantara/hitachi.raidcom.ansible/issues
 
 ## Authors
 For feedback reach the Hitachi Vantara development team by email: raidcomansible@hitachivantara.com
