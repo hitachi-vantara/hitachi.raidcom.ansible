@@ -1,7 +1,7 @@
 ## NOTE: Hitachi Vantara released it's official collection here:
 ##       https://github.com/hitachi-vantara/vspone-block-ansible
 
-## !!!   This repsitory will be deleted soon.  !!!
+## !!!   This repsitory is for a very specific usecase only.  !!!
 
 ## Ansible Collection - Hitachi.Raidcom
 Ansible modules to manage Hitachi VSP storage based on hiraid Python library that uses Hitachi CCI/Raidcom (CLI)
