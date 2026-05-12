@@ -95,7 +95,7 @@ message:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachi.raidcom.plugins.module_utils.hitachi_raidcom import hitachi_raidcom, hitachi_raidcom_argument_spec
+from ansible_collections.hitachivantara.raidcom.plugins.module_utils.hitachi_raidcom import hitachi_raidcom, hitachi_raidcom_argument_spec
 
 
 def run_module():
