@@ -1,5 +1,15 @@
 ancestor: null
 releases:
+  0.6.3:
+    changes:
+      bugfixes:
+      - hur - fix module output which can't be deserialized leading to ansible failure
+      release_summary: Fix broken hur ansible module output
+    release_date: '2026-05-20'
+    modules:
+    - description: manage HUR (Hitachi Universal Replicator)
+      name: hur
+      namespace: 'hitachivantara.raidcom'
   0.6.2:
     changes:
       bugfixes:
