@@ -46,7 +46,7 @@ options:
     - The specific copy_group name as defined in the horcm file
     type: str
     required: true
-  
+
 requirements:
 - CCI/raidcom CLI software from support.hitachivantara.com (customer login required)
 - horcm.conf file, horcmstart and login done (work is in progress to automate this)
@@ -96,12 +96,13 @@ message:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.hitachivantara.raidcom.plugins.module_utils.hitachi_raidcom import hitachi_raidcom, hitachi_raidcom_argument_spec
-
+import io
+import sys
 
 def run_module():
 
-    # # define available arguments/parameters a user can pass to the module
-    # # add here the module specific values provided by the playbook
+    # define available arguments/parameters a user can pass to the module
+    # add here the module specific values provided by the playbook
     argument_spec = {
         "state": {"required": True, "type": "str", "choices": ["absent", "present", "resynced", "splitted", "takeover", "display", "query", "chkdsp"]},
         "copy_group": {"required": True, "type": "str"},
@@ -135,57 +136,70 @@ def run_module():
         supports_check_mode=True,
     )
 
-    raidcom = hitachi_raidcom(module)
+    # Use a capture buffer as a replacement for system stdout to keep proper behavior of dependencies
+    # without exposing their output to ansible
+    # Then swap the capture buffer again with real stdout to print the json result of the ansible module
+    capture_buffer = io.StringIO()
+    real_stdout = sys.stdout
+    try:
+        sys.stdout = capture_buffer
+        raidcom = hitachi_raidcom(module)
 
-    # if the user is working with this module in only check mode we do not
-    # make any changes to the environment
-    # for now just acknowledge we run in check mode and are aware of
-    result['facts'] = {}  # result['facts'] = dict() pylint complains
-    # Check mode should not print anything. A warning would help me to understand better if checkmode was active.
-    # if module.check_mode:
-    #    module.warn('*** Check Mode Active *** No changes will be executed !')
+        # if the user is working with this module in only check mode we do not
+        # make any changes to the environment
+        # for now just acknowledge we run in check mode and are aware of
+        result['facts'] = {}  # result['facts'] = dict() pylint complains
+        # Check mode should not print anything. A warning would help me to understand better if checkmode was active.
+        # if module.check_mode:
+        #    module.warn('*** Check Mode Active *** No changes will be executed !')
 
-    # query/display: get current hur pair status information
-    if (module.params["state"] == "query") or (module.params["state"] == "display"):
-        result['facts'] = raidcom.hur_status()
-        result['changed'] = False
+        # query/display: get current hur pair status information
+        if (module.params["state"] == "query") or (module.params["state"] == "display"):
+            result['facts'] = raidcom.hur_status()
+            result['changed'] = False
 
-    # present: pair create
-    if module.params["state"] == "present":
-        result['facts'] = raidcom.hur_create()
-        result['changed'] = True
+        # present: pair create
+        if module.params["state"] == "present":
+            result['facts'] = raidcom.hur_create()
+            result['changed'] = True
 
-    # absent: pair delete (simplex)
-    if module.params["state"] == "absent":
-        result['facts'] = raidcom.hur_delete()
-        result['changed'] = True
+        # absent: pair delete (simplex)
+        if module.params["state"] == "absent":
+            result['facts'] = raidcom.hur_delete()
+            result['changed'] = True
 
-    # absent: pair splitted (psus/ssus)
-    if module.params["state"] == "splitted":
-        result['facts'] = raidcom.hur_split()
-        result['changed'] = True
+        # absent: pair splitted (psus/ssus)
+        if module.params["state"] == "splitted":
+            result['facts'] = raidcom.hur_split()
+            result['changed'] = True
 
-    # absent: pair resync
-    if module.params["state"] == "resynced":
-        result['facts'] = raidcom.hur_resync()
-        result['changed'] = True
+        # absent: pair resync
+        if module.params["state"] == "resynced":
+            result['facts'] = raidcom.hur_resync()
+            result['changed'] = True
 
-    # absent: pair horctakeover
-    if module.params["state"] == "takeover":
-        result['facts'] = raidcom.hur_takeover()
-        result['changed'] = True
-        
-    # absent: pair raidvchkdsp
-    if module.params["state"] == "chkdsp":
-        result['facts'] = raidcom.hur_chkdsp()
-        result['changed'] = False
+        # absent: pair horctakeover
+        if module.params["state"] == "takeover":
+            result['facts'] = raidcom.hur_takeover()
+            result['changed'] = True
 
-    # query/display: get current hur pair status information
-    #if module.params["state"] == "splitted":
-    #    result['facts'] = raidcom.hur_split()
-    #    #result['changed'] = False
+        # absent: pair raidvchkdsp
+        if module.params["state"] == "chkdsp":
+            result['facts'] = raidcom.hur_chkdsp()
+            result['changed'] = False
 
-    module.exit_json(**result)
+        # query/display: get current hur pair status information
+        #if module.params["state"] == "splitted":
+        #    result['facts'] = raidcom.hur_split()
+        #    #result['changed'] = False
+    except Exception as e:
+        sys.stdout = real_stdout
+        module.fail_json(msg=f"Raidcom error: {e}")
+    else:
+        sys.stdout = real_stdout
+        module.exit_json(**result)
+    finally:
+        sys.stdout = real_stdout
 
 # Main
 def main():
