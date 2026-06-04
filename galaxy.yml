@@ -8,7 +8,7 @@ namespace: hitachivantara
 name: raidcom
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 0.6.3
+version: 0.6.4
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -44,7 +44,7 @@ tags: [hitachi,vantara,storage,vsp,raidcom,cci,horcm,hiraid]
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://github.com/hhitachi-vantara/hitachi.raidcom.ansible
+repository: https://github.com/hitachi-vantara/hitachi.raidcom.ansible
 
 # The URL to any online docs
 documentation: https://github.com/hitachi-vantara/hitachi.raidcom.ansible
