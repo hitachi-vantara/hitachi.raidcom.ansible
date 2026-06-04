@@ -1,5 +1,12 @@
 ancestor: null
 releases:
+  0.6.4:
+    changes:
+      bugfixes:
+      - galaxy.yml - fix typo in repository URL (``hhitachi-vantara`` -> ``hitachi-vantara``)
+        so the "View on GitHub" link on Ansible Galaxy resolves correctly
+      release_summary: Fix repository URL typo in collection metadata
+    release_date: '2026-06-04'
   0.6.3:
     changes:
       bugfixes:

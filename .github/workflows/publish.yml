@@ -62,7 +62,7 @@ jobs:
     - name: Publish to Ansible Galaxy
       env:
         COLLECTION_NAME: "hitachivantara.raidcom"
-        VERSION: "0.6.3"
+        VERSION: "0.6.4"
         API_KEY: ${{ secrets.ANSIBLE_COLLECTIONS_TOKEN }}
       run: |
         # Attempt to delete the existing collection (if supported)
